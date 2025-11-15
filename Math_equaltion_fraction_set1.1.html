@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fraction Equality • Kru Pai Classroom</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+
+  body{
+    margin:0;
+    padding:0;
+    font-family:'Prompt',sans-serif;
+    background: linear-gradient(#fff9db,#ffeeb0);
+    display:flex;
+    justify-content:center;
+  }
+
+  .container{
+    width:100%;
+    max-width:750px;
+    padding:20px;
+  }
+
+  /* โลโก้ */
+  .logo{
+    text-align:center;
+    font-size:26px;
+    font-weight:700;
+    color:#d4a106;
+    letter-spacing:1px;
+    margin-bottom:12px;
+    text-shadow:0 2px 3px rgba(0,0,0,0.15);
+  }
+
+  .card{
+    background:white;
+    padding:24px;
+    border-radius:26px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.12);
+  }
+
+  h1{
+    margin-top:0;
+    text-align:center;
+    color:#e1a300;
+    font-size:26px;
+    margin-bottom:10px;
+  }
+
+  input[type="text"]{
+    width:100%;
+    padding:14px;
+    margin-top:6px;
+    border:none;
+    background:#fff7d4;
+    border-radius:14px;
+    font-size:18px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.09);
+  }
+
+  .btn{
+    width:100%;
+    background:#ffcf4d;
+    border:none;
+    padding:14px;
+    border-radius:18px;
+    font-size:20px;
+    font-weight:600;
+    margin-top:15px;
+    cursor:pointer;
+    box-shadow:0 3px 0 #dca600;
+  }
+  .btn:active{
+    transform:translateY(2px);
+    box-shadow:0 1px 0 #dca600;
+  }
+
+  .status{
+    text-align:center;
+    margin-bottom:18px;
+    font-size:18px;
+    color:#555;
+  }
+
+  /* เศษส่วน */
+  .fraction-box{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:30px;
+    margin:20px 0;
+  }
+
+  .frac{
+    text-align:center;
+  }
+  .top,.bottom{
+    font-size:36px;
+    font-weight:700;
+    color:#333;
+  }
+
+  .line{
+    width:100px;
+    height:4px;
+    background:#f3c43b;
+    margin:6px auto;
+    border-radius:999px;
+  }
+
+  /* กล่องตอบ */
+  .answer-input{
+    width:90px;
+    padding:8px;
+    font-size:32px;
+    border:3px solid #ffca3b;
+    border-radius:16px;
+    text-align:center;
+    background:#fffef6;
+    box-shadow:0 0 8px rgba(255,220,100,0.3);
+  }
+
+  .feedback{
+    text-align:center;
+    margin-top:12px;
+    min-height:28px;
+    font-size:20px;
+  }
+
+  /* Numpad */
+  .numpad{
+    margin-top:16px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+  }
+
+  .num-btn{
+    padding:14px 0;
+    font-size:22px;
+    background:#ffefb0;
+    border-radius:16px;
+    border:2px solid #ffd86d;
+    box-shadow:0 3px 0 #e4bf4c;
+    cursor:pointer;
+    font-weight:600;
+  }
+  .num-btn:active{
+    transform:translateY(2px);
+    box-shadow:0 1px 0 #e4be42;
+  }
+
+  /* summary */
+  .summary-score{
+    font-size:30px;
+    text-align:center;
+    margin:20px 0;
+    color:#d09d00;
+    font-weight:700;
+  }
+
+  /* เอฟเฟกต์ตอบถูก */
+  @keyframes correctPop {
+    0%{ transform:scale(1);}
+    50%{ transform:scale(1.2);}
+    100%{ transform:scale(1);}
+  }
+  .correct-anim{
+    animation:correctPop 0.4s ease;
+  }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div id="start" class="card">
+    <div class="logo">Kru Pai Classroom</div>
+    <h1>เกมเศษส่วนที่เท่ากัน</h1>
+    <p style="text-align:center;color:#555;">เติมตัวเลขให้ได้ค่าเท่ากัน 🍋✨</p>
+
+    <label>ชื่อผู้เล่น</label>
+    <input id="player" type="text" placeholder="กรอกชื่อจ้า">
+
+    <button class="btn" onclick="startGame()">เริ่มเล่นเลย 💛</button>
+  </div>
+
+  <div id="game" class="card" style="display:none;">
+    <div class="logo">Kru Pai Classroom</div>
+
+    <div class="status">
+      ผู้เล่น: <span id="showName"></span> •
+      ข้อ <span id="qNum">1</span>/20 •
+      คะแนน <span id="score">0</span>
+    </div>
+
+    <div class="fraction-box">
+      <div class="frac">
+        <span id="bTop" class="top">1</span>
+        <div class="line"></div>
+        <span id="bBottom" class="bottom">2</span>
+      </div>
+
+      <div style="font-size:38px;font-weight:700;">=</div>
+
+      <div class="frac">
+        <span id="rTop" class="top"></span>
+        <div class="line"></div>
+        <span id="rBottom" class="bottom"></span>
+      </div>
+    </div>
+
+    <div id="feedback" class="feedback"></div>
+
+    <div class="numpad">
+      <button class="num-btn" onclick="num(7)">7</button>
+      <button class="num-btn" onclick="num(8)">8</button>
+      <button class="num-btn" onclick="num(9)">9</button>
+      <button class="num-btn" onclick="num(4)">4</button>
+      <button class="num-btn" onclick="num(5)">5</button>
+      <button class="num-btn" onclick="num(6)">6</button>
+      <button class="num-btn" onclick="num(1)">1</button>
+      <button class="num-btn" onclick="num(2)">2</button>
+      <button class="num-btn" onclick="num(3)">3</button>
+      <button class="num-btn" onclick="num(0)">0</button>
+      <button class="num-btn" onclick="del()">ลบ</button>
+      <button class="num-btn" onclick="checkAns()">OK</button>
+    </div>
+
+  </div>
+
+  <div id="summary" class="card" style="display:none;">
+    <div class="logo">Kru Pai Classroom</div>
+    <h1>สรุปคะแนน 🍋✨</h1>
+    <div class="summary-score">
+      คะแนนของหนู: <span id="final"></span>
+    </div>
+    <button class="btn" onclick="restart()">เล่นใหม่ 🔁</button>
+  </div>
+
+</div>
+
+<script>
+  const questions = [
+    {a:1,b:2,type:"top",known:10,ans:5},
+    {a:2,b:3,type:"top",known:9,ans:6},
+    {a:3,b:4,type:"top",known:12,ans:9},
+    {a:2,b:5,type:"top",known:20,ans:8},
+    {a:3,b:5,type:"top",known:20,ans:12},
+    {a:4,b:7,type:"top",known:21,ans:12},
+    {a:5,b:6,type:"top",known:18,ans:15},
+    {a:1,b:3,type:"top",known:12,ans:4},
+    {a:3,b:8,type:"top",known:24,ans:9},
+    {a:4,b:9,type:"top",known:27,ans:12},
+
+    {a:2,b:3,type:"bottom",known:6,ans:9},
+    {a:3,b:5,type:"bottom",known:9,ans:15},
+    {a:4,b:7,type:"bottom",known:12,ans:21},
+    {a:5,b:8,type:"bottom",known:15,ans:24},
+    {a:3,b:10,type:"bottom",known:12,ans:40},
+    {a:2,b:9,type:"bottom",known:10,ans:45},
+    {a:4,b:11,type:"bottom",known:12,ans:33},
+    {a:5,b:12,type:"bottom",known:20,ans:48},
+    {a:3,b:7,type:"bottom",known:6,ans:14},
+    {a:2,b:5,type:"bottom",known:10,ans:25}
+  ];
+
+  let quiz=[], index=0, score=0;
+  const bTop=document.getElementById("bTop");
+  const bBottom=document.getElementById("bBottom");
+  const rTop=document.getElementById("rTop");
+  const rBottom=document.getElementById("rBottom");
+  const feedback=document.getElementById("feedback");
+  const answer=document.createElement("input");
+  answer.className="answer-input";
+  answer.readOnly=true;
+
+  function shuffle(a){
+    const arr=[...a];
+    for(let i=arr.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
+  }
+
+  function startGame(){
+    const name=document.getElementById("player").value.trim()||"เด็กเก่ง";
+    document.getElementById("showName").textContent=name;
+
+    quiz=shuffle(questions);
+    index=0;
+    score=0;
+    document.getElementById("score").textContent=score;
+
+    document.getElementById("start").style.display="none";
+    document.getElementById("summary").style.display="none";
+    document.getElementById("game").style.display="block";
+
+    loadQ();
+  }
+
+  function loadQ(){
+    const q=quiz[index];
+    bTop.textContent=q.a;
+    bBottom.textContent=q.b;
+    feedback.textContent="";
+    answer.value="";
+
+    rTop.textContent="";
+    rBottom.textContent="";
+
+    if(q.type==="top"){
+      rBottom.textContent=q.known;
+      rTop.appendChild(answer);
+    }else{
+      rTop.textContent=q.known;
+      rBottom.appendChild(answer);
+    }
+
+    document.getElementById("qNum").textContent=index+1;
+  }
+
+  function num(n){
+    if(answer.value.length<3){
+      answer.value+=n;
+    }
+  }
+
+  function del(){ answer.value=answer.value.slice(0,-1); }
+
+  function checkAns(){
+    const q=quiz[index];
+    const val=parseInt(answer.value);
+
+    if(val===q.ans){
+      score++;
+      document.getElementById("score").textContent=score;
+      feedback.style.color="green";
+      feedback.textContent="ถูกต้องจ้า! 🍋✨";
+      feedback.classList.add("correct-anim");
+      setTimeout(()=>feedback.classList.remove("correct-anim"),300);
+    }else{
+      feedback.style.color="#d33838";
+      feedback.textContent="ยังไม่ถูกนะ คำตอบคือ "+q.ans;
+    }
+
+    setTimeout(()=>{
+      index++;
+      if(index>=quiz.length){
+        finish();
+      }else{
+        loadQ();
+      }
+    },800);
+  }
+
+  function finish(){
+    document.getElementById("game").style.display="none";
+    document.getElementById("summary").style.display="block";
+    document.getElementById("final").textContent=score+"/20";
+  }
+
+  function restart(){
+    document.getElementById("summary").style.display="none";
+    document.getElementById("start").style.display="block";
+  }
+</script>
+
+</body>
+</html>

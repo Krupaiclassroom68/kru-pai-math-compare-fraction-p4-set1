@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Compare Fractions • Kru Pai Classroom</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+
+  body{
+    margin:0;
+    padding:0;
+    font-family:'Prompt',sans-serif;
+    background:linear-gradient(#fff9db,#ffeeb0);
+    display:flex;
+    justify-content:center;
+  }
+  .container{
+    width:100%;
+    max-width:750px;
+    padding:20px;
+  }
+
+  .logo{
+    text-align:center;
+    font-size:26px;
+    font-weight:700;
+    color:#d4a106;
+    margin-bottom:10px;
+    text-shadow:0 2px 3px rgba(0,0,0,0.15);
+  }
+
+  .card{
+    background:#ffffff;
+    padding:24px;
+    border-radius:26px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.12);
+  }
+
+  h1{
+    margin-top:0;
+    text-align:center;
+    color:#e1a300;
+    font-size:24px;
+    margin-bottom:8px;
+  }
+  .subtitle{
+    text-align:center;
+    color:#666;
+    font-size:15px;
+    margin-bottom:14px;
+  }
+
+  input[type="text"]{
+    width:100%;
+    padding:14px;
+    margin-top:6px;
+    border:none;
+    background:#fff7d4;
+    border-radius:14px;
+    font-size:18px;
+    box-shadow:inset 0 0 5px rgba(0,0,0,0.09);
+  }
+
+  .btn{
+    width:100%;
+    background:#ffcf4d;
+    border:none;
+    padding:14px;
+    border-radius:18px;
+    font-size:20px;
+    font-weight:600;
+    margin-top:15px;
+    cursor:pointer;
+    box-shadow:0 3px 0 #dca600;
+  }
+  .btn:active{
+    transform:translateY(2px);
+    box-shadow:0 1px 0 #dca600;
+  }
+
+  .status{
+    text-align:center;
+    margin-bottom:18px;
+    font-size:17px;
+    color:#555;
+  }
+
+  /* เศษส่วน + กล่องกลาง */
+  .question-row{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:18px;
+    margin:18px 0 6px;
+  }
+
+  .frac{
+    text-align:center;
+    min-width:80px;
+  }
+  .top,.bottom{
+    font-size:34px;
+    font-weight:700;
+    color:#333;
+  }
+  .line{
+    width:100px;
+    height:4px;
+    background:#f3c43b;
+    margin:6px auto;
+    border-radius:999px;
+  }
+
+  .center-box{
+    width:90px;
+    height:70px;
+    border-radius:18px;
+    border:3px solid #f1c342;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:40px;
+    font-weight:700;
+    background:#fffef6;
+    box-shadow:0 0 10px rgba(0,0,0,0.05);
+  }
+
+  .center-box.correct{
+    background:linear-gradient(135deg,#fff7c0,#ffe06e);
+    box-shadow:0 0 16px rgba(255,210,90,0.8);
+  }
+  .center-box.wrong{
+    background:#ffe5e5;
+    border-color:#ff7a7a;
+    box-shadow:0 0 12px rgba(255,120,120,0.7);
+  }
+
+  /* ปุ่มเลือกเครื่องหมาย */
+  .sign-row{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    margin-top:12px;
+  }
+  .sign-btn{
+    flex:1;
+    max-width:120px;
+    padding:12px 0;
+    font-size:26px;
+    background:#ffefb0;
+    border-radius:18px;
+    border:2px solid #ffd86d;
+    box-shadow:0 3px 0 #e4bf4c;
+    cursor:pointer;
+    font-weight:700;
+  }
+  .sign-btn:active{
+    transform:translateY(2px);
+    box-shadow:0 1px 0 #e4be42;
+  }
+
+  .feedback{
+    text-align:center;
+    margin-top:10px;
+    min-height:30px;
+    font-size:20px;
+  }
+
+  .summary-score{
+    font-size:30px;
+    text-align:center;
+    margin:20px 0;
+    color:#d09d00;
+    font-weight:700;
+  }
+
+  @keyframes pop {
+    0%{transform:scale(1);}
+    50%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+  }
+  .pop-anim{
+    animation:pop 0.4s ease;
+  }
+
+  @media (max-width:600px){
+    .top,.bottom{font-size:30px;}
+    .center-box{width:80px;height:64px;font-size:34px;}
+    .sign-btn{font-size:24px;}
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- START -->
+  <div id="start" class="card">
+    <div class="logo">Kru Pai Classroom</div>
+    <h1>เกมเปรียบเทียบเศษส่วน · ชุดที่ 1</h1>
+    <div class="subtitle">เลือก &lt;  =  &gt; ให้ตรงระหว่างสองเศษส่วน 🍋</div>
+
+    <label>ชื่อผู้เล่น</label>
+    <input id="player" type="text" placeholder="กรอกชื่อจ้า">
+
+    <button class="btn" onclick="startGame()">เริ่มเล่นเลย 💛</button>
+  </div>
+
+  <!-- GAME -->
+  <div id="game" class="card" style="display:none;">
+    <div class="logo">Kru Pai Classroom</div>
+
+    <div class="status">
+      ผู้เล่น: <span id="showName"></span> •
+      ข้อ <span id="qNum">1</span>/25 •
+      คะแนน <span id="score">0</span>
+    </div>
+
+    <div class="question-row">
+      <div class="frac">
+        <div id="lTop" class="top"></div>
+        <div class="line"></div>
+        <div id="lBottom" class="bottom"></div>
+      </div>
+
+      <div id="centerBox" class="center-box">?</div>
+
+      <div class="frac">
+        <div id="rTop" class="top"></div>
+        <div class="line"></div>
+        <div id="rBottom" class="bottom"></div>
+      </div>
+    </div>
+
+    <div class="sign-row">
+      <button class="sign-btn" onclick="chooseSign('<')">&lt;</button>
+      <button class="sign-btn" onclick="chooseSign('=')">=</button>
+      <button class="sign-btn" onclick="chooseSign('>')">&gt;</button>
+    </div>
+
+    <div id="feedback" class="feedback"></div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div id="summary" class="card" style="display:none;">
+    <div class="logo">Kru Pai Classroom</div>
+    <h1>สรุปคะแนน 🍋✨</h1>
+    <div class="summary-score">
+      คะแนนของหนู: <span id="final"></span>
+    </div>
+    <button class="btn" onclick="restart()">เล่นใหม่ 🔁</button>
+  </div>
+
+</div>
+
+<script>
+  /********** ชุดคำถาม 25 ข้อ **********/
+  // ans: "<" ">" "="
+  const questions = [
+    {a:1,b:2,c:1,d:3,ans:">"},
+    {a:3,b:4,c:2,d:3,ans:">"},
+    {a:2,b:5,c:1,d:2,ans:"<"},
+    {a:5,b:8,c:3,d:4,ans:"<"},
+    {a:3,b:10,c:1,d:5,ans:">"},
+    {a:4,b:7,c:6,d:7,ans:"<"},
+    {a:2,b:3,c:3,d:5,ans:">"},
+    {a:5,b:6,c:4,d:5,ans:">"},
+    {a:7,b:8,c:3,d:4,ans:">"},
+    {a:2,b:9,c:1,d:6,ans:">"},
+    {a:4,b:9,c:2,d:3,ans:"<"},
+    {a:5,b:12,c:1,d:3,ans:">"},
+    {a:7,b:10,c:2,d:5,ans:">"},
+    {a:9,b:11,c:4,d:5,ans:">"},
+    {a:3,b:8,c:5,d:12,ans:"<"},
+    {a:5,b:9,c:4,d:9,ans:">"},
+    {a:7,b:12,c:2,d:3,ans:"<"},
+    {a:11,b:12,c:5,d:6,ans:">"},
+    {a:3,b:5,c:6,d:10,ans:"="},
+    {a:4,b:5,c:8,d:9,ans:"<"},
+    {a:2,b:7,c:3,d:7,ans:"<"},
+    {a:5,b:11,c:4,d:11,ans:">"},
+    {a:3,b:10,c:9,d:30,ans:"="},
+    {a:7,b:9,c:14,d:18,ans:"="},
+    {a:4,b:6,c:2,d:3,ans:"="}
+  ];
+
+  /********** ตัวแปร DOM **********/
+  const startEl   = document.getElementById("start");
+  const gameEl    = document.getElementById("game");
+  const summaryEl = document.getElementById("summary");
+
+  const showNameEl = document.getElementById("showName");
+  const qNumEl   = document.getElementById("qNum");
+  const scoreEl  = document.getElementById("score");
+  const finalEl  = document.getElementById("final");
+
+  const lTopEl   = document.getElementById("lTop");
+  const lBottomEl= document.getElementById("lBottom");
+  const rTopEl   = document.getElementById("rTop");
+  const rBottomEl= document.getElementById("rBottom");
+  const centerBox= document.getElementById("centerBox");
+  const feedbackEl = document.getElementById("feedback");
+
+  let quiz = [];
+  let index = 0;
+  let score = 0;
+
+  /********** ระบบเสียง **********/
+  let audioCtx = null;
+  function ensureAudioCtx(){
+    try{
+      if(!audioCtx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return;
+        audioCtx = new AC();
+      }
+      if(audioCtx.state === "suspended"){
+        audioCtx.resume();
+      }
+    }catch(e){
+      console.log(e);
+    }
+  }
+  function playTone(freq, dur, type){
+    ensureAudioCtx();
+    if(!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type || "sine";
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now+dur);
+    osc.start(now);
+    osc.stop(now+dur);
+  }
+  function playClick(){ playTone(650,0.08,"square"); }
+  function playCorrect(){
+    playTone(950,0.12,"sine");
+    setTimeout(()=>playTone(1250,0.16,"sine"),120);
+  }
+  function playWrong(){ playTone(260,0.2,"sawtooth"); }
+
+  /********** ฟังก์ชันเกม **********/
+  function shuffle(arr){
+    const a=[...arr];
+    for(let i=a.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  }
+
+  function startGame(){
+    const name = document.getElementById("player").value.trim() || "เด็กเก่ง";
+    showNameEl.textContent = name;
+
+    quiz = shuffle(questions);
+    index = 0;
+    score = 0;
+    scoreEl.textContent = score;
+
+    startEl.style.display = "none";
+    summaryEl.style.display = "none";
+    gameEl.style.display = "block";
+
+    loadQuestion();
+  }
+
+  function loadQuestion(){
+    const q = quiz[index];
+    qNumEl.textContent = index + 1;
+    feedbackEl.textContent = "";
+    centerBox.textContent = "?";
+    centerBox.classList.remove("correct","wrong","pop-anim");
+
+    lTopEl.textContent    = q.a;
+    lBottomEl.textContent = q.b;
+    rTopEl.textContent    = q.c;
+    rBottomEl.textContent = q.d;
+  }
+
+  function chooseSign(sign){
+    playClick();
+    const q = quiz[index];
+    centerBox.textContent = sign;
+
+    if(sign === q.ans){
+      score++;
+      scoreEl.textContent = score;
+      feedbackEl.style.color = "green";
+      feedbackEl.textContent = "ถูกต้องจ้า! 🎉";
+      centerBox.classList.remove("wrong");
+      centerBox.classList.add("correct","pop-anim");
+      playCorrect();
+    }else{
+      feedbackEl.style.color = "#d33838";
+      feedbackEl.textContent = "ผิดนะ 😳 ลองดูข้อถัดไป";
+      centerBox.classList.remove("correct");
+      centerBox.classList.add("wrong","pop-anim");
+      playWrong();
+    }
+
+    setTimeout(()=>{
+      index++;
+      if(index >= quiz.length){
+        finishGame();
+      }else{
+        loadQuestion();
+      }
+    }, 1000);
+  }
+
+  function finishGame(){
+    gameEl.style.display = "none";
+    summaryEl.style.display = "block";
+    finalEl.textContent = score + "/25";
+  }
+
+  function restart(){
+    summaryEl.style.display = "none";
+    startEl.style.display = "block";
+  }
+</script>
+
+</body>
+</html>
